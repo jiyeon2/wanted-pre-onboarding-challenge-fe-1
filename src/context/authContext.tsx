@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useMemo, useContext } from "react";
+import tokenHelper from "../util/tokenHelper";
 
 export type AuthStateType = {
   token: string | null;
@@ -21,7 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const savedToken = localStorage.getItem("todo_app_token");
+    const savedToken = tokenHelper.getToken();
     if (savedToken) {
       setToken(savedToken);
     }
@@ -31,11 +32,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     () => ({
       saveToken(token: string) {
         setToken(token);
-        localStorage.setItem("todo_app_token", token);
+        tokenHelper.saveToken(token);
       },
       removeToken() {
         setToken(null);
-        localStorage.removeItem("todo_app_token");
+        tokenHelper.removeToken();
       },
     }),
     []
